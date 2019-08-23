@@ -195,6 +195,10 @@ func (cb *CircuitBreaker) State() State {
 // If a panic occurs in the request, the CircuitBreaker handles it as an error
 // and causes the same panic again.
 func (cb *CircuitBreaker) Execute(req func() (interface{}, error)) (interface{}, error) {
+	if cb == nil {
+		return req()
+	}
+
 	generation, err := cb.beforeRequest()
 	if err != nil {
 		return nil, err
